@@ -13,16 +13,19 @@ jobs:
         working-directory: /mnt
     runs-on: ubuntu-latest
     steps:
-      - name: Free space
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: false
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
+      - name: Change permission
+        run: |
+          sudo chown -R "${WORKSPACE_OWNER}" /mnt
+          #      - name: Free space
+          #        uses: jlumbroso/free-disk-space@main
+          #        with:
+          #          tool-cache: false
+          #          android: true
+          #          dotnet: true
+          #          haskell: true
+          #          large-packages: true
+          #          docker-images: true
+          #          swap-storage: true
       - name: Show left space
         run: |
           df -H
