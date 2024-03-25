@@ -10,6 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Show left space
+        run: |
+          df -H
       - name: Get depot_tools
         run: |
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
