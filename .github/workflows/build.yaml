@@ -10,6 +10,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Free space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
       - name: Show left space
         run: |
           df -H
