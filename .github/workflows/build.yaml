@@ -19,11 +19,11 @@ jobs:
           echo "$(pwd)/depot_tools" >> $GITHUB_PATH
           mkdir chromium
       - name: Pull code
-        working_directory: chromium
+        working-directory: chromium
         run: |
           fetch --nohooks --no-history chromium
       - name: Install deps
-        working_directory: chromium/src
+        working-directory: chromium/src
         run: |
           ./build/install-build-deps.sh
           ./build/linux/sysroot_scripts/install-sysroot.py --arch=arm
@@ -33,7 +33,7 @@ jobs:
           gclient sync
           gn gen out --args='enable_nacl=false symbol_level=0 is_debug=false blink_symbol_level=0 v8_symbol_level=0 target_cpu="arm64"'
       - name: Show head and tag
-        working_directory: chromium/src
+        working-directory: chromium/src
         run: |
           git status
           git tags --list
