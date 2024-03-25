@@ -25,9 +25,16 @@ jobs:
           ./build/install-build-deps.sh
           ./build/linux/sysroot_scripts/install-sysroot.py --arch=arm
           gclient runhooks
-          mkdir out
-          echo -e 'enable_nacl=false\nsymbol_level=0\nis_debug=false\nblink_symbol_level=0\nv8_symbol_level=0\ntarget_cpu="arm64"' > out/args.gn
-      - name: Build
+          git fetch --tags
+          git checkout ${{ inputs.tag }}
+          gclient sync
+          gn gen out --args='enable_nacl=false symbol_level=0 is_debug=false blink_symbol_level=0 v8_symbol_level=0 target_cpu="arm64"'
+      - name: Show head and tag
         working_directory: chromium/src
         run: |
-          autoninja -C out chrome
+          git status
+          git tags --list
+          #      - name: Build
+          #        working_directory: chromium/src
+          #        run: |
+          #          autoninja -C out chrome
