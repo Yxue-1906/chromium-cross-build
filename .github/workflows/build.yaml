@@ -15,7 +15,11 @@ jobs:
     steps:
       - name: Change permission
         run: |
-          sudo chown -R "${WORKSPACE_OWNER}" /mnt
+          sudo swapoff -a
+          sudo rm -f /mnt/swapfile
+          sudo umount /mnt
+          mkdir disk
+          sudo mount /dev/sda1 disk
           #      - name: Free space
           #        uses: jlumbroso/free-disk-space@main
           #        with:
