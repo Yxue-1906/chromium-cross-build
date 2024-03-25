@@ -13,6 +13,7 @@ jobs:
       - name: Show left space
         run: |
           df -H
+          pwd
       - name: Get depot_tools
         run: |
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
@@ -26,7 +27,7 @@ jobs:
         working-directory: chromium/src
         run: |
           ./build/install-build-deps.sh
-          ./build/linux/sysroot_scripts/install-sysroot.py --arch=arm
+          ./build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
           gclient runhooks
           git fetch --tags
           git checkout ${{ inputs.tag }}
