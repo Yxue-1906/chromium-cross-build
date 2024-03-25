@@ -1,0 +1,33 @@
+name: build
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to build'
+        required: true
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get depot_tools
+        run: |
+          git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+          echo "$(pwd)/depot_tools" >> $GITHUB_PATH
+          mkdir chromium
+      - name: Pull code
+        working_directory: chromium
+        run: |
+          fetch --nohooks chromium
+      - name: Install deps
+        working_directory: chromium/src
+        run: |
+          ./build/install-build-deps.sh
+          ./build/linux/sysroot_scripts/install-sysroot.py --arch=arm
+          gclient runhooks
+          mkdir out
+          echo -e 'enable_nacl=false\nsymbol_level=0\nis_debug=false\nblink_symbol_level=0\nv8_symbol_level=0\ntarget_cpu="arm64"' > out/args.gn
+      - name: Build
+        working_directory: chromium/src
+        run: |
+          autoninja -C out chrome
