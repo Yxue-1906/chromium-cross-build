@@ -13,23 +13,16 @@ jobs:
         working-directory: /mnt
     runs-on: ubuntu-latest
     steps:
-      - name: Change permission
-        run: |
-          sudo swapoff -a
-          sudo rm -f /mnt/swapfile
-          sudo umount /mnt
-          mkdir disk
-          sudo mount /dev/sda1 disk
-          #      - name: Free space
-          #        uses: jlumbroso/free-disk-space@main
-          #        with:
-          #          tool-cache: false
-          #          android: true
-          #          dotnet: true
-          #          haskell: true
-          #          large-packages: true
-          #          docker-images: true
-          #          swap-storage: true
+      - name: max build space
+        uses:  easimon/maximize-build-space@v10
+        with:
+          root-reserve-mb: 1024
+          swap-size-mb: 512
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+          remove-docker-images: 'true'
       - name: Show left space
         run: |
           df -H
