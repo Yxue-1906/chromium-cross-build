@@ -32,9 +32,9 @@ jobs:
         run: |
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
           echo "$(pwd)/depot_tools" >> $GITHUB_PATH
-          mkdir build/chromium
+          mkdir /mnt/chromium
       - name: Pull code
-        working-directory: build/chromium
+        working-directory: /mnt/chromium
         env:
           TAG: ${{ inputs.tag }}
         run: |
