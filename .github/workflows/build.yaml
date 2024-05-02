@@ -27,8 +27,9 @@ jobs:
           sudo swapoff -a
           sudo rm -rf /mnt/*
           sudo umount /mnt
+          dummy=($(lsblk | grep /mnt))
           mkdir build
-          sudo mount /dev/sda1 build
+          sudo mount ${dummy[0]} build
           sudo chown -R $(whoami) build
           df -H
       - name: Get depot_tools
