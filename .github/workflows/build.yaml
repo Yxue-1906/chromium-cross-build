@@ -42,7 +42,7 @@ jobs:
         env:
           TAG: ${{ inputs.tag }}
         run: |
-          echo 'solutions = [ { "name": "src", "url": "https://chromium.googlesource.com/chromium/src.git", "managed": False, "custom_deps": {}, "custom_vars": {}, }, ]' > .gclient
+          echo 'solutions = [ { "name": "src", "url": "https://chromium.googlesource.com/chromium/src.git", "managed": False, "custom_deps": {}, "custom_vars": { "checkout_pgo_profiles": True, }, }, ]' > .gclient
           mkdir src
           cd src
           git init
