@@ -10,6 +10,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Maximize build space
+        uses: AdityaGarg8/remove-unwanted-software@v3
+        with:
+          remove-android: 'true'
+          remove-dotnet: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+          remove-docker-images: 'true'
+          remove-large-packages: 'true'
+          remove-cached-tools: 'true'
+          remove-swapfile: 'true'
       - name: Show left space
         run: |
           df -H
