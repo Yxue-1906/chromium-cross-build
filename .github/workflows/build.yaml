@@ -48,7 +48,7 @@ jobs:
           cd ..
           gclient sync
       - name: Install deps
-        working-directory: build/chromium/src
+        working-directory: /mnt/chromium/src
         run: |
           ./build/install-build-deps.sh
           ./build/linux/sysroot_scripts/install-sysroot.py --arch=${{ inputs.arch }}
@@ -58,11 +58,11 @@ jobs:
           gclient sync
           gn gen out --args="enable_nacl=false is_debug=false symbol_level=0 blink_symbol_level=0 v8_symbol_level=0 is_official_build=true target_cpu=\"${{ inputs.arch }}\""
       - name: Build
-        working-directory: build/chromium/src
+        working-directory: /mnt/chromium/src
         run: |
           autoninja -C out chrome/installer/linux
       - uses: actions/upload-artifact@v4
         name: Upload artifacts
         with:
           name: installers
-          path: 'build/chromium/src/out/*.deb'
+          path: '/mnt/chromium/src/out/*.deb'
