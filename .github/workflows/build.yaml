@@ -60,7 +60,7 @@ jobs:
           git fetch --tags
           git checkout ${{ inputs.tag }}
           gclient sync
-          gn gen out --args="enable_nacl=false\nis_debug=false\nsymbol_level=0\nblink_symbol_level=0\nv8_symbol_level=0\nis_official_build=true\ntarget_cpu=\"${{ inputs.arch }}\""
+          gn gen out --args="enable_nacl=false is_debug=false symbol_level=0 blink_symbol_level=0 v8_symbol_level=0 is_official_build=true target_cpu=\"${{ inputs.arch }}\""
       - name: Show left space
         run: |
           df -H
