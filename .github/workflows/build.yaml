@@ -65,7 +65,6 @@ jobs:
           autoninja -C out chrome/installer/linux
       - uses: actions/upload-artifact@v4
         name: Upload artifacts
-        working-directory: build/chromium/src/out
         with:
           name: installers
-          path: '*.deb'
+          path: 'build/chromium/src/out/*.deb'
