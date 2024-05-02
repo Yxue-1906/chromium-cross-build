@@ -27,9 +27,12 @@ jobs:
           sudo swapoff -a
           sudo rm -rf /mnt/*
           sudo umount /mnt
+          echo umount done
           dummy=($(lsblk | grep /mnt))
           mkdir build
+          echo ${dummy[0]} will be mount to build
           sudo mount ${dummy[0]} build
+          echo change owner
           sudo chown -R $(whoami) build
           df -H
       - name: Get depot_tools
