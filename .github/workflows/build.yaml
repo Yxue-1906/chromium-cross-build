@@ -30,8 +30,8 @@ jobs:
           echo umount done
           dummy=($(lsblk | grep /mnt))
           mkdir build
-          echo ${dummy[0]} will be mount to build
-          sudo mount ${dummy[0]} build
+          echo $dummy will be mount to build
+          sudo mount $dummy build
           echo change owner
           sudo chown -R $(whoami) build
           df -H
