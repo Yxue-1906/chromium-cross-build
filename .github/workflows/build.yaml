@@ -28,6 +28,7 @@ jobs:
           mkdir src
           cd src
           git init
+          echo 'start fetch'
           git fetch https://chromium.googlesource.com/chromium/src.git +refs/tags/$TAG:dummy --depth=1
           git checkout $TAG
           cd ..
