@@ -21,15 +21,16 @@ jobs:
           mkdir chromium
       - name: Pull code
         working-directory: chromium
+        env:
+          TAG: ${{ inputs.tag }}
         run: |
           echo 'solutions = [ { "name": "src", "url": "https://chromium.googlesource.com/chromium/src.git", "managed": False, "custom_deps": {}, "custom_vars": {}, }, ]' > .gclient
           mkdir src
           cd src
           git init
-          git fetch https://chromium.googlesource.com/chromium/src.git +refs/tags/$INPUT_tag:dummy
-          git checkout $INPUT_tag
+          git fetch https://chromium.googlesource.com/chromium/src.git +refs/tags/$TAG:dummy
+          git checkout $TAG
           cd ..
-          gclient sync
       - name: Install deps
         working-directory: chromium/src
         run: |
