@@ -27,7 +27,7 @@ jobs:
           sudo swapoff -a
           sudo rm -rf /mnt/*
           sudo umount /mnt
-          mkdir temp
+          mkdir build
           sudo mount /dev/sda1 build
           df -H
       - name: Get depot_tools
