@@ -29,6 +29,7 @@ jobs:
           sudo umount /mnt
           mkdir build
           sudo mount /dev/sda1 build
+          sudo chown -R $(whoami) build
           df -H
       - name: Get depot_tools
         run: |
