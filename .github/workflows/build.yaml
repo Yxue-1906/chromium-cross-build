@@ -60,14 +60,11 @@ jobs:
           git fetch --tags
           git checkout ${{ inputs.tag }}
           gclient sync
-          gn gen out --args='enable_nacl=false symbol_level=0 is_debug=false blink_symbol_level=0 v8_symbol_level=0 target_cpu="arm64"'
+          gn gen out --args="enable_nacl=false\nis_debug=false\nsymbol_level=0\nblink_symbol_level=0\nv8_symbol_level=0\nis_official_build=true\ntarget_cpu=\"${{ inputs.arch }}\""
       - name: Show left space
         run: |
           df -H
       - name: Build
         working-directory: chromium/src
         run: |
-          mkdir out
-          echo -e "enable_nacl=false\nis_debug=false\nsymbol_level=0\nblink_symbol_level=0\nv8_symbol_level=0\nis_official_build=true\ntarget_cpu=${{ inputs.arch }}" > out/args.gn
-          gn gen out
           autoninja -C out chrome/installer/linux
