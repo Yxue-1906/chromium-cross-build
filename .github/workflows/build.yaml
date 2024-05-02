@@ -29,39 +29,4 @@ jobs:
           sudo umount /mnt
           mkdir temp
           sudo mount /dev/sda1 temp
-      - name: Get depot_tools
-        run: |
-          git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-          echo "$(pwd)/depot_tools" >> $GITHUB_PATH
-          mkdir chromium
-      - name: Pull code
-        working-directory: chromium
-        env:
-          TAG: ${{ inputs.tag }}
-        run: |
-          echo 'solutions = [ { "name": "src", "url": "https://chromium.googlesource.com/chromium/src.git", "managed": False, "custom_deps": {}, "custom_vars": { "checkout_pgo_profiles": True, }, }, ]' > .gclient
-          mkdir src
-          cd src
-          git init
-          echo 'start fetch'
-          git fetch https://chromium.googlesource.com/chromium/src.git +refs/tags/$TAG:dummy --depth=1
-          git checkout $TAG
-          cd ..
-          gclient sync
-      - name: Install deps
-        working-directory: chromium/src
-        run: |
-          ./build/install-build-deps.sh
-          ./build/linux/sysroot_scripts/install-sysroot.py --arch=${{ inputs.arch }}
-          gclient runhooks
-          git fetch --tags
-          git checkout ${{ inputs.tag }}
-          gclient sync
-          gn gen out --args="enable_nacl=false is_debug=false symbol_level=0 blink_symbol_level=0 v8_symbol_level=0 is_official_build=true target_cpu=\"${{ inputs.arch }}\""
-      - name: Show left space
-        run: |
           df -H
-      - name: Build
-        working-directory: chromium/src
-        run: |
-          autoninja -C out chrome/installer/linux
