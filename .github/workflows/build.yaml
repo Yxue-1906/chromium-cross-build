@@ -3,24 +3,27 @@ on:
   workflow_dispatch:
     inputs:
       tag:
+        type: string
         description: 'Tag to build'
         required: true
+      arch:
+        type: choice
+        description: 'Arch to build'
+        required: true
+        default: 'x86_64'
+        options:
+          - x86_64
+          - arm64
         
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Maximize build space
-        uses: AdityaGarg8/remove-unwanted-software@v3
-        with:
-          remove-android: 'true'
-          remove-dotnet: 'true'
-          remove-haskell: 'true'
-          remove-codeql: 'true'
-          remove-docker-images: 'true'
-          remove-large-packages: 'true'
-          remove-cached-tools: 'true'
-          remove-swapfile: 'true'
+      - name: mount sda1
+        run: |
+          sudo umount /mnt
+          mkdir temp
+          sudo mount /dev/sda1 temp
       - name: Show left space
         run: |
           df -H
@@ -48,14 +51,16 @@ jobs:
         working-directory: chromium/src
         run: |
           ./build/install-build-deps.sh
-          ./build/linux/sysroot_scripts/install-sysroot.py --arch=arm64
+          ./build/linux/sysroot_scripts/install-sysroot.py --arch=${{ inputs.arch }}
           gclient runhooks
           git fetch --tags
           git checkout ${{ inputs.tag }}
           gclient sync
           gn gen out --args='enable_nacl=false symbol_level=0 is_debug=false blink_symbol_level=0 v8_symbol_level=0 target_cpu="arm64"'
-      - name: Show head and tag
+      - name: Build
         working-directory: chromium/src
         run: |
-          git status
-          git tags --list
+          mkdir out
+          echo -e "enable_nacl=false\nis_debug=false\nsymbol_level=0\nblink_symbol_level=0\nv8_symbol_level=0\nis_official_build=true\ntarget_cpu=${{ inputs.arch }}" > out/args.gn
+          gn gen out
+          autoninja -C out chrome/installer/linux
