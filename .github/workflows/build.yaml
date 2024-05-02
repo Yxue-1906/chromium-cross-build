@@ -10,16 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: max build space
-        uses:  easimon/maximize-build-space@v10
-        with:
-          root-reserve-mb: 1024
-          swap-size-mb: 512
-          remove-dotnet: 'true'
-          remove-android: 'true'
-          remove-haskell: 'true'
-          remove-codeql: 'true'
-          remove-docker-images: 'true'
       - name: Show left space
         run: |
           df -H
@@ -32,7 +22,14 @@ jobs:
       - name: Pull code
         working-directory: chromium
         run: |
-          fetch --nohooks --no-history chromium
+          echo 'solutions = [ { "name": "src", "url": "https://chromium.googlesource.com/chromium/src.git", "managed": False, "custom_deps": {}, "custom_vars": {}, }, ]' > .gclient
+          mkdir src
+          cd src
+          git init
+          git fetch https://chromium.googlesource.com/chromium/src.git +refs/tags/${{ inputs.tag }}:dummy
+          git checkout ${{ inputs.tag }}
+          cd ..
+          gclient sync
       - name: Install deps
         working-directory: chromium/src
         run: |
@@ -48,7 +45,3 @@ jobs:
         run: |
           git status
           git tags --list
-          #      - name: Build
-          #        working_directory: chromium/src
-          #        run: |
-          #          autoninja -C out chrome
