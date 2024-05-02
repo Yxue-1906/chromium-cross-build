@@ -10,9 +10,11 @@ on:
         type: choice
         description: 'Arch to build'
         required: true
-        default: 'x86_64'
+        default: 'x64'
         options:
-          - x86_64
+          - x64
+          - x86
+          - arm
           - arm64
         
 jobs:
