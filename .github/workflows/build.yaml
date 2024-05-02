@@ -26,8 +26,8 @@ jobs:
           mkdir src
           cd src
           git init
-          git fetch https://chromium.googlesource.com/chromium/src.git +refs/tags/${{ inputs.tag }}:dummy
-          git checkout ${{ inputs.tag }}
+          git fetch https://chromium.googlesource.com/chromium/src.git +refs/tags/$INPUT_tag:dummy
+          git checkout $INPUT_tag
           cd ..
           gclient sync
       - name: Install deps
